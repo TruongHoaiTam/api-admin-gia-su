@@ -4,11 +4,11 @@ const LocalStrategy = require('passport-local').Strategy;
 const md5 = require('md5');
 const ExtractJWT = passportJWT.ExtractJwt;
 const JWTStrategy = passportJWT.Strategy;
-const UserModel = require('../model/user');
+const AdminModel = require('../model/admin');
 
 passport.use(new LocalStrategy(
     (username, password, cb) => {
-        UserModel.findOne({ username })
+        AdminModel.findOne({ username })
             .then(user => {
                 if (user && user.password === md5(password)) {
                     return cb(null, user, { message: 'Đăng nhập thành công' });
@@ -26,7 +26,7 @@ passport.use(new JWTStrategy({
     secretOrKey: 'your_jwt_secret'
 },
     (jwtPayload, cb) => {
-        return UserModel.findOne({ _id: jwtPayload.user._id })
+        return AdminModel.findOne({ _id: jwtPayload.user._id })
             .then(user => {
                 return cb(null, user);
             })

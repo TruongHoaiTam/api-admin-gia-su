@@ -1,9 +1,6 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 var cors = require('cors');
-
-mongoose.connect(`mongodb+srv://Hatomia:hatomiatruong@admin-gia-su-m4ekp.gcp.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 

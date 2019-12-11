@@ -3,11 +3,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const md5 = require('md5');
 const passport = require('../../app/config/passport');
-const UserModel = require('../model/user');
+const AdminModel = require('../model/admin');
 
 
 router.post('/create-admin', async (req, res) => {
-    await UserModel.findOne({ username: req.body.username })
+    await AdminModel.findOne({ username: req.body.username })
         .then(async result => {
             if (result == null) {
                 const user = {
@@ -16,14 +16,13 @@ router.post('/create-admin', async (req, res) => {
                     avatar: (req.body.avatar !== undefined && req.body.avatar !== "undefined") ? req.body.avatar : "uploads\\no-avatar.jpg"
                 };
                 res.status(200).json(user);
-                return new UserModel(user).save();
+                return new AdminModel(user).save();
             }
             return res.status(404).send('Đăng ký thất bại');
         })
 });
 
 router.post('/login', (req, res) => {
-    console.log('a')
     passport.authenticate('local', { session: false }, (err, user, info) => {
         if (err || !user) {
             return res.status(400).json({
