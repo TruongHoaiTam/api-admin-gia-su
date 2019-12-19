@@ -30,11 +30,15 @@ router.post('/login', (req, res) => {
                 user
             });
         }
-        req.login(user, { session: false }, (error) => {
+        req.login(user, { session: false }, async (error) => {
             if (error) {
                 res.send(error);
             }
-            const token = jwt.sign({ user }, 'your_jwt_secret');
+            const _user = {
+                ...user,
+                avatar: undefined
+            }
+            const token = await jwt.sign({ _user }, 'your_jwt_secret');
             return res.status(200).json({ user, token });
         });
         return null;
