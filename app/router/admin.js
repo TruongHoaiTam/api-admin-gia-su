@@ -62,14 +62,22 @@ router.put('/contract/status', async (req, res) => {
 })
 
 router.put('/contract/status/admin', async (req, res) => {
-    const option = (req.body.status === 'still validate') ? { status: 'finished' } : { status: 'still validate' };
-    const contract = await ContractModel.findOne({ id: req.body.id });
+    let contract = await ContractModel.findOne({ id: req.body.id });
 
-    contract.status = 'finished';
+    let option;
+    if (req.body.pending_complaint === true) {
+        option = { status: 'pending complaint' };
+        contract.status = 'pending complaint';
+    } else {
+        option = (req.body.status === 'still validate') ? { status: 'finished' } : { status: 'still validate' };
+        contract.status = 'finished';
+    }
+
     await ContractModel.updateOne({ id: req.body.id }, option).then(() => {
         return res.status(200).json(contract);
     })
 })
+
 
 module.exports = router;
 
