@@ -46,6 +46,17 @@ router.delete('/tag', async (req, res) => {
     }
 })
 
+router.put('/contract/complaint/admin', async (req, res) => {
+    let contract = await ContractModel.findOne({ id: req.body.id });
+
+    let option = { status: 'finished' };
+    contract.status = 'finished';
+
+    await ContractModel.updateOne({ id: req.body.id }, option).then(() => {
+        return res.status(200).json(contract);
+    })
+})
+
 router.post('/contract', async (req, res) => {
     req.body.status = 'still validate';
     res.status(200).json(req.body);
@@ -76,6 +87,11 @@ router.put('/contract/status/admin', async (req, res) => {
     await ContractModel.updateOne({ id: req.body.id }, option).then(() => {
         return res.status(200).json(contract);
     })
+})
+
+router.delete('/contract', async (req, res) => {
+    await ContractModel.deleteOne({ _id: mongoose.Types.ObjectId(req.body._id) });
+    return res.status(200).json(req.body);
 })
 
 
